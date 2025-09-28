@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Manufacturing File Processing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --success: #4cc9f0;
+            --dark: #1d3557;
+            --text: #333;
+            --bg: #f5f7fa;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        [data-theme="dark"] {
+            --primary: #5a7aff;
+            --secondary: #4a1bc2;
+            --accent: #8a2be2;
+            --light: #2d3748;
+            --success: #5acff0;
+            --dark: #0f172a;
+            --text: #e2e8f0;
+            --bg: #1a202c;
+            --card-bg: rgba(45, 55, 72, 0.9);
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--bg) 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: var(--text);
+            padding-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            background: linear-gradient(120deg, var(--primary), var(--secondary), var(--accent));
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
+        }
+        
+        .card {
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            margin-bottom: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(120deg, var(--primary), var(--accent));
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(120deg, var(--accent), var(--primary));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-success {
+            background: linear-gradient(120deg, #4cc9f0, #4895ef);
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 50px;
+        }
+        
+        .btn-success:hover {
+            background: linear-gradient(120deg, #4895ef, #4cc9f0);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(76, 201, 240, 0.4);
+        }
+        
+        .btn-export {
+            background: linear-gradient(120deg, #f72585, #b5179e);
+            border: none;
+            padding: 12px 25px;
+            font-weight: bold;
+            border-radius: 50px;
+            color: white;
+        }
+        
+        .btn-export:hover {
+            background: linear-gradient(120deg, #b5179e, #f72585);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(247, 37, 133, 0.4);
+        }
+        
+        .step-card {
+            background: linear-gradient(135deg, var(--light) 0%, #e9ecef 100%);
+            border-left: 5px solid var(--primary);
+        }
+        
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 20px;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .status-box {
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(240, 247, 255, 0.8);
+            border: 2px solid rgba(208, 224, 255, 0.7);
+            margin-top: 20px;
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        
+        [data-theme="dark"] .status-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid rgba(51, 65, 85, 0.7);
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list i {
+            color: var(--primary);
+            margin-left: 10px;
+            font-size: 20px;
+        }
+        
+        .results-table {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            background: var(--card-bg);
+            margin-top: 25px;
+            display: none;
+        }
+        
+        .table-header {
+            background: linear-gradient(120deg, var(--primary), var(--accent));
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .table-header h4 {
+            margin-bottom: 0;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .no-results {
+            padding: 30px;
+            text-align: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+        
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .operation-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin: 2px;
+        }
+        
+        .tag-M {
+            background-color: rgba(67, 97, 238, 0.2);
+            color: var(--primary);
+        }
+        
+        .tag-C {
+            background-color: rgba(76, 201, 240, 0.2);
+            color: #4cc9f0;
+        }
+        
+        .tag-B {
+            background-color: rgba(247, 37, 133, 0.2);
+            color: #f72585;
+        }
+        
+        .tag-combined {
+            background-color: rgba(58, 12, 163, 0.2);
+            color: var(--secondary);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .theme-toggle, .lang-toggle {
+            background: var(--card-bg);
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .theme-toggle:hover, .lang-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .card {
+                border-radius: 15px;
+            }
+            
+            .table th, .table td {
+                font-size: 0.9rem;
+                padding: 8px 5px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .table-header .btn {
+                margin-top: 10px;
+                width: 100%;
+            }
+            
+            .export-options {
+                flex-direction: column;
+            }
+            
+            .export-options .btn {
+                width: 100%;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+        
+        .glow {
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 5px rgba(67, 97, 238, 0.5);
+            }
+            to {
+                box-shadow: 0 0 15px rgba(67, 97, 238, 0.8);
+            }
+        }
+        
+        .lang-ar {
+            direction: rtl;
+            text-align: right;
+        }
+        
+        .lang-en {
+            direction: ltr;
+            text-align: left;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="lang-en" data-theme="light">
+    <div class="container">
+        <div class="controls">
+            <div>
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="bi bi-moon"></i>
+                    <span class="en">Dark Mode</span>
+                    <span class="ar hidden">????? ??????</span>
+                </button>
+            </div>
+            <div>
+                <button class="lang-toggle" id="langToggle">
+                    <i class="bi bi-translate"></i>
+                    <span class="en">???????</span>
+                    <span class="ar hidden">English</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="header text-center">
+            <h1 class="display-4 fw-bold en">Advanced Manufacturing File Processing System</h1>
+            <h1 class="display-4 fw-bold ar hidden">???? ?????? ????? ??????? ???????</h1>
+            <p class="lead fs-5 en">Intelligent application for extracting and analyzing manufacturing data from Excel files</p>
+            <p class="lead fs-5 ar hidden">????? ??? ???????? ?????? ?????? ??????? ?? ????? ????</p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="card">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <div class="icon-circle glow">
+                                <i class="bi bi-file-earmark-excel"></i>
+                            </div>
+                            <h3 class="fw-bold en">Import Excel File</h3>
+                            <h3 class="fw-bold ar hidden">??????? ??? ????</h3>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="excelFile" class="form-label fw-medium en">Choose an Excel file to process data</label>
+                            <label for="excelFile" class="form-label fw-medium ar hidden">???? ??? ???? ??????? ????????</label>
+                            <input type="file" class="form-control" id="excelFile" accept=".xlsx, .xls" 
+                                   style="border-radius: 12px; padding: 12px; border: 2px dashed #4361ee;">
+                            <small class="text-muted d-block mt-2 en">
+                                Please upload an Excel file containing steel and sheet metal manufacturing data
+                            </small>
+                            <small class="text-muted d-block mt-2 ar hidden">
+                                ???? ????? ??? ???? ????? ??? ?????? ????? ?????? ?????? ??????
+                            </small>
+                        </div>
+                        
+                        <button id="processBtn" class="btn btn-primary btn-lg w-100" disabled>
+                            <i class="bi bi-play-circle me-2"></i>
+                            <span class="en">Start Processing File</span>
+                            <span class="ar hidden">??? ?????? ?????</span>
+                        </button>
+                        
+                        <div class="export-options">
+                            <a id="downloadLink" class="btn btn-success btn-lg d-none" 
+                               download="Processed_Data.xlsx">
+                                <i class="bi bi-download me-2"></i>
+                                <span class="en">Download Processed File</span>
+                                <span class="ar hidden">????? ????? ???????</span>
+                            </a>
+                            
+                            <button id="exportTableBtn" class="btn btn-export btn-lg d-none">
+                                <i class="bi bi-table me-2"></i>
+                                <span class="en">Export Table to Excel</span>
+                                <span class="ar hidden">????? ?????? ??? Excel</span>
+                            </button>
+                        </div>
+                        
+                        <div id="status" class="status-box">
+                            <div class="d-flex align-items-center">
+                                <div class="spinner-border text-primary me-2" role="status" style="display: none;">
+                                    <span class="visually-hidden">Processing...</span>
+                                </div>
+                                <div id="statusText" class="fw-medium"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Results Table -->
+                        <div id="resultsContainer" class="results-table">
+                            <div class="table-header p-3">
+                                <div>
+                                    <h4 class="mb-0 text-white en">Processed Results</h4>
+                                    <h4 class="mb-0 text-white ar hidden">??????? ????????</h4>
+                                    <p class="mb-0 text-white-50 en">Data processed according to required standards</p>
+                                    <p class="mb-0 text-white-50 ar hidden">??? ?????? ???????? ??? ???????? ????????</p>
+                                </div>
+                                <button id="exportTableHeaderBtn" class="btn btn-light btn-sm">
+                                    <i class="bi bi-download me-1"></i>
+                                    <span class="en">Export Table</span>
+                                    <span class="ar hidden">????? ??????</span>
+                                </button>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped mb-0" id="resultsTable">
+                                    <thead class="bg-light">
+                                        <tr>
+                                            <th scope="col" style="width: 12%;">component</th>
+                                            <th scope="col" style="width: 12%;">profile</th>
+                                            <th scope="col" style="width: 12%;">Grade</th>
+                                            <th scope="col" style="width: 12%;">qty</th>
+                                            <th scope="col" style="width: 12%;">Length</th>
+                                            <th scope="col" style="width: 12%;">weight</th>
+                                            <th scope="col" style="width: 12%;">Operation</th>
+                                            <th scope="col" style="width: 12%;">diameter</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="resultsTableBody">
+                                        <!-- Data will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card step-card">
+                    <div class="card-body">
+                        <h4 class="fw-bold mb-3 en">How the Application Works</h4>
+                        <h4 class="fw-bold mb-3 ar hidden">??? ???? ???????</h4>
+                        <ul class="feature-list">
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Reads the attached file and extracts data from required columns</span>
+                                <span class="ar hidden">???? ????? ??????? ??????? ???????? ?? ??????? ????????</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Starts from row 11 then every 10 rows (21, 31, 41, etc.) for main columns</span>
+                                <span class="ar hidden">???? ?? ???? 11 ?? ?? 10 ??? (21? 31? 41? ???) ??????? ????????</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Extracts additional columns (like Operation and diameter) from different rows</span>
+                                <span class="ar hidden">?????? ????? ?????? (??? Operation ?diameter) ?? ????? ??????</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Removes units (mm, kg) from data as required</span>
+                                <span class="ar hidden">???? ??????? (mm, kg) ?? ???????? ??? ???????</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Processes the Operation column and replaces:</span>
+                                <span class="ar hidden">????? ???? Operation ???????:</span>
+                                <ul class="mt-2">
+                                    <li class="en">CUTTING/DRILLING/MARKING ? M</li>
+                                    <li class="ar hidden">CUTTING/DRILLING/MARKING ? M</li>
+                                    <li class="en">COPING ? C</li>
+                                    <li class="ar hidden">COPING ? C</li>
+                                    <li class="en">BENDING ? B</li>
+                                    <li class="ar hidden">BENDING ? B</li>
+                                    <li class="en">Operation combinations ? M,C / M,B / M,C,B</li>
+                                    <li class="ar hidden">??????? ???????? ? M,C / M,B / M,C,B</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Displays all results in a clear table with export capability</span>
+                                <span class="ar hidden">???? ???? ??????? ?? ???? ???? ?? ??????? ???????</span>
+                            </li>
+                            <li>
+                                <i class="bi bi-check-circle"></i>
+                                <span class="en">Provides two export options: complete processed file or displayed table only</span>
+                                <span class="ar hidden">???? ?????? ???????: ????? ??????? ?????? ?? ?????? ??????? ???</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('excelFile');
+            const processBtn = document.getElementById('processBtn');
+            const downloadLink = document.getElementById('downloadLink');
+            const exportTableBtn = document.getElementById('exportTableBtn');
+            const exportTableHeaderBtn = document.getElementById('exportTableHeaderBtn');
+            const statusBox = document.getElementById('status');
+            const statusText = document.getElementById('statusText');
+            const spinner = statusBox.querySelector('.spinner-border');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const resultsTableBody = document.getElementById('resultsTableBody');
+            const themeToggle = document.getElementById('themeToggle');
+            const langToggle = document.getElementById('langToggle');
+            const body = document.body;
+            
+            // ????? ?????? ???????? ????????
+            let processedData = [];
+
+            // ????? ?? ???????? ??? ?????? ???
+            fileInput.addEventListener('change', function() {
+                processBtn.disabled = !this.files.length;
+                downloadLink.classList.add('d-none');
+                exportTableBtn.classList.add('d-none');
+                statusBox.style.display = 'none';
+                resultsContainer.style.display = 'none';
+                resultsTableBody.innerHTML = '';
+            });
+
+            // ????? ????? ??????
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                body.setAttribute('data-theme', newTheme);
+                
+                // ????? ?????? ????
+                const icon = this.querySelector('i');
+                if (newTheme === 'dark') {
+                    icon.classList.remove('bi-moon');
+                    icon.classList.add('bi-sun');
+                } else {
+                    icon.classList.remove('bi-sun');
+                    icon.classList.add('bi-moon');
+                }
+                
+                // ??? ??????? ?? localStorage
+                localStorage.setItem('theme', newTheme);
+            });
+
+            // ????? ?????
+            langToggle.addEventListener('click', function() {
+                const isEnglish = body.classList.contains('lang-en');
+                const newLang = isEnglish ? 'ar' : 'en';
+                
+                // ????? ??????
+                body.classList.remove('lang-en', 'lang-ar');
+                body.classList.add(`lang-${newLang}`);
+                
+                // ????? ?????? ???????
+                document.querySelectorAll('.en, .ar').forEach(el => {
+                    el.classList.toggle('hidden');
+                });
+                
+                // ????? ?? ?? ?????
+                const langText = this.querySelector('span');
+                
+                // ??? ??????? ?? localStorage
+                localStorage.setItem('language', newLang);
+            });
+
+            // ????? ????????? ????????
+            function loadPreferences() {
+                // ????? ????? ??????
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme) {
+                    body.setAttribute('data-theme', savedTheme);
+                    const icon = themeToggle.querySelector('i');
+                    if (savedTheme === 'dark') {
+                        icon.classList.remove('bi-moon');
+                        icon.classList.add('bi-sun');
+                    }
+                }
+                
+                // ????? ?????
+                const savedLang = localStorage.getItem('language');
+                if (savedLang && savedLang === 'ar') {
+                    body.classList.remove('lang-en');
+                    body.classList.add('lang-ar');
+                    document.querySelectorAll('.en, .ar').forEach(el => {
+                        el.classList.toggle('hidden');
+                    });
+                }
+            }
+
+            // ??????? ????? ????????? ??? ??? ???????
+            loadPreferences();
+
+            // ???? ??????? ???? Operation
+            function processOperationValue(operationValue) {
+                if (!operationValue || typeof operationValue !== 'string') {
+                    return '';
+                }
+                
+                // ??????? ??? ???? ????? ????????
+                const lowerCaseValue = operationValue.toLowerCase();
+                let operations = [];
+                
+                // ?????? ?? ???? ???????? ????????
+                const hasCutting = lowerCaseValue.includes('cutting');
+                const hasDrilling = lowerCaseValue.includes('drilling');
+                const hasMarking = lowerCaseValue.includes('marking');
+                const hasCoping = lowerCaseValue.includes('coping');
+                const hasBending = lowerCaseValue.includes('bending');
+                
+                // ??? ???? ????? ??? ?? ?? ?????? ????? ?????? ?????????
+                if (hasCutting || hasDrilling || hasMarking) {
+                    operations.push('M');
+                }
+                
+                // ??? ???? ????? ??? ???? coping
+                if (hasCoping) {
+                    operations.push('C');
+                }
+                
+                // ??? ???? ????? ??? ???? bending
+                if (hasBending) {
+                    operations.push('B');
+                }
+                
+                // ????? ???????? ?????? ?????? ??????
+                return operations.join(', ');
+            }
+
+            // ?????? ?????
+            processBtn.addEventListener('click', function() {
+                if (!fileInput.files.length) return;
+                
+                // ??? ???? ????????
+                statusBox.style.display = 'block';
+                spinner.style.display = 'inline-block';
+                
+                // ????? ?? ?????? ????? ??? ?????
+                if (body.classList.contains('lang-en')) {
+                    statusText.textContent = 'Processing file...';
+                } else {
+                    statusText.textContent = '???? ?????? ?????...';
+                }
+                
+                resultsContainer.style.display = 'none';
+                resultsTableBody.innerHTML = '';
+                
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        
+                        // ????? ???????? ??? ????
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        // ?????? ???????? ??? ???????
+                        processedData = [];
+                        let processedCount = 0;
+                        
+                        // ????? ?? ???? 11 (???? 10 ?? ????????) ?????? ?? 10
+                        for (let i = 10; i < jsonData.length; i += 10) {
+                            const mainRow = jsonData[i] || [];
+                            const operationRow = (i + 2 < jsonData.length) ? jsonData[i + 2] : [];
+                            const diameterRow = (i + 6 < jsonData.length) ? jsonData[i + 6] : [];
+                            
+                            // ???? ??? ??? ???? ?????? ??????
+                            if (mainRow.length > 0 || operationRow.length > 0 || diameterRow.length > 0) {
+                                // ?????? Length (????? mm)
+                                let lengthVal = mainRow[4] || '';
+                                if (typeof lengthVal === 'string') {
+                                    lengthVal = lengthVal.replace(/mm/gi, '').trim();
+                                }
+                                
+                                // ?????? weight (????? kg)
+                                let weightVal = mainRow[6] || '';
+                                if (typeof weightVal === 'string') {
+                                    weightVal = weightVal.replace(/kg/gi, '').trim();
+                                }
+                                
+                                // ?????? Operation
+                                let operationVal = operationRow[1] || '';
+                                operationVal = processOperationValue(operationVal);
+                                
+                                // ????? ???????? ??? ???????
+                                processedData.push({
+                                    component: mainRow[0] || '',
+                                    profile: mainRow[1] || '',
+                                    Grade: mainRow[2] || '',
+                                    qty: mainRow[3] || '',
+                                    Length: lengthVal,
+                                    weight: weightVal,
+                                    Operation: operationVal,
+                                    diameter: diameterRow[1] || ''
+                                });
+                                processedCount++;
+                            }
+                        }
+                        
+                        // ????? ????? ??????
+                        const newWorksheet = XLSX.utils.json_to_sheet(processedData, {
+                            header: ['component', 'profile', 'Grade', 'qty', 'Length', 'weight', 'Operation', 'diameter'],
+                            skipHeader: false
+                        });
+                        
+                        const newWorkbook = XLSX.utils.book_new();
+                        XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Processed_Data');
+                        
+                        // ????? ??? ????
+                        const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
+                        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+                        
+                        // ????? ???? ???????
+                        downloadLink.href = URL.createObjectURL(blob);
+                        downloadLink.classList.remove('d-none');
+                        
+                        // ??? ??????? ?? ??????
+                        if (processedData.length > 0) {
+                            resultsTableBody.innerHTML = '';
+                            processedData.forEach(item => {
+                                const row = document.createElement('tr');
+                                
+                                // ????? ??? ??????? ????? Operation
+                                let operationClass = '';
+                                if (item.Operation.includes('M') && item.Operation.includes('C') && item.Operation.includes('B')) {
+                                    operationClass = 'tag-combined';
+                                } else if (item.Operation.includes('M') && item.Operation.includes('C')) {
+                                    operationClass = 'tag-M tag-C';
+                                } else if (item.Operation.includes('M') && item.Operation.includes('B')) {
+                                    operationClass = 'tag-M tag-B';
+                                } else if (item.Operation === 'M') {
+                                    operationClass = 'tag-M';
+                                } else if (item.Operation === 'C') {
+                                    operationClass = 'tag-C';
+                                } else if (item.Operation === 'B') {
+                                    operationClass = 'tag-B';
+                                }
+                                
+                                row.innerHTML = `
+                                    <td>${item.component || '<span class="text-muted">-</span>'}</td>
+                                    <td>${item.profile || '<span class="text-muted">-</span>'}</td>
+                                    <td>${item.Grade || '<span class="text-muted">-</span>'}</td>
+                                    <td>${item.qty || '<span class="text-muted">-</span>'}</td>
+                                    <td>${item.Length || '<span class="text-muted">-</span>'}</td>
+                                    <td>${item.weight || '<span class="text-muted">-</span>'}</td>
+                                    <td>
+                                        ${item.Operation ? 
+                                            item.Operation.split(', ').map(op => 
+                                                `<span class="operation-tag tag-${op}">${op}</span>`
+                                            ).join(' ') 
+                                            : '<span class="text-muted">-</span>'
+                                        }
+                                    </td>
+                                    <td>${item.diameter || '<span class="text-muted">-</span>'}</td>
+                                `;
+                                resultsTableBody.appendChild(row);
+                            });
+                            resultsContainer.style.display = 'block';
+                            exportTableBtn.classList.remove('d-none');
+                        } else {
+                            resultsTableBody.innerHTML = `
+                                <tr>
+                                    <td colspan="8" class="text-center p-4 text-muted">
+                                        <i class="bi bi-exclamation-circle me-2"></i>
+                                        <span class="en">No matching data found in the file</span>
+                                        <span class="ar hidden">?? ??? ?????? ??? ?????? ?????? ?? ?????</span>
+                                    </td>
+                                </tr>
+                            `;
+                            resultsContainer.style.display = 'block';
+                        }
+                        
+                        // ????? ??????
+                        spinner.style.display = 'none';
+                        if (body.classList.contains('lang-en')) {
+                            statusText.textContent = `Successfully processed ${processedCount} records!`;
+                        } else {
+                            statusText.textContent = `??? ?????? ${processedCount} ??? ?????!`;
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error processing file:', error);
+                        spinner.style.display = 'none';
+                        
+                        if (body.classList.contains('lang-en')) {
+                            statusText.textContent = `Processing error: ${error.message}`;
+                        } else {
+                            statusText.textContent = `??? ?? ????????: ${error.message}`;
+                        }
+                        
+                        resultsTableBody.innerHTML = `
+                            <tr>
+                                <td colspan="8" class="text-center p-4 text-danger">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    ${error.message}
+                                </td>
+                            </tr>
+                        `;
+                        resultsContainer.style.display = 'block';
+                    }
+                };
+                
+                reader.readAsArrayBuffer(file);
+            });
+            
+            // ????? ???????? ?? ??????
+            function exportTableToExcel() {
+                if (processedData.length === 0) {
+                    if (body.classList.contains('lang-en')) {
+                        alert('No data to export');
+                    } else {
+                        alert('?? ???? ?????? ????????');
+                    }
+                    return;
+                }
+                
+                // ????? ???? ??? ????? ?? ???????? ????????
+                const worksheet = XLSX.utils.json_to_sheet(processedData, {
+                    header: ['component', 'profile', 'Grade', 'qty', 'Length', 'weight', 'Operation', 'diameter'],
+                    skipHeader: false
+                });
+                
+                // ????? ???? ???? ?????? ??????
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, 'Processed_Data');
+                
+                // ????? ??? Excel ???????
+                XLSX.writeFile(workbook, 'Processed_Data_From_Table.xlsx');
+            }
+            
+            // ????? ?????? ??????? ?????? ???????
+            exportTableBtn.addEventListener('click', exportTableToExcel);
+            exportTableHeaderBtn.addEventListener('click', exportTableToExcel);
+        });
+    </script>
+</body>
+</html>
