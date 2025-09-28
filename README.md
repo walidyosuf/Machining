@@ -1,9 +1,6 @@
 Manufacturing File Processor
 An advanced web-based Excel processing application designed specifically for manufacturing data, with support for both English and Arabic languages.
 
-https://img.shields.io/badge/Version-1.0.0-blue.svg
-https://img.shields.io/badge/License-MIT-green.svg
-
 🌟 Features
 Excel File Processing: Upload and process manufacturing Excel files with steel and sheet metal data
 
