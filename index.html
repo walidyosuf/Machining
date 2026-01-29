@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturing File Processor - Updated Columns</title>
+    <title>Manufacturing File Processor - Dynamic Columns</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -66,7 +66,6 @@
             font-weight: 500;
             color: var(--primary);
             text-align: center;
-            border-left: 1px solid var(--border-color);
         }
 
         .results-table {
@@ -104,6 +103,7 @@
             color: white;
             text-align: center;
             white-space: nowrap;
+            border: 1px solid rgba(255,255,255,0.1);
         }
     </style>
 </head>
@@ -124,7 +124,7 @@
 
         <div class="header text-center">
             <h1 id="txtTitle">Manufacturing File Processor</h1>
-            <p id="txtSubTitle">Optimized processing with discrete operation columns</p>
+            <p id="txtSubTitle">Smart dynamic columns for manufacturing operations</p>
         </div>
 
         <div class="row">
@@ -163,18 +163,8 @@
                     </div>
                     <div class="table-responsive bg-white rounded-3 shadow-sm">
                         <table class="table table-bordered align-middle mb-0" id="mainTable">
-                            <thead>
-                                <tr>
-                                    <th>Component</th>
-                                    <th>Profile</th>
-                                    <th>Grade</th>
-                                    <th>Op 1</th>
-                                    <th>Op 2</th>
-                                    <th>Op 3</th>
-                                    <th>Op 4</th>
-                                    <th>Op 5</th>
-                                    <th>Op 6</th>
-                                </tr>
+                            <thead id="tableHead">
+                                <!-- Dynamic Headers -->
                             </thead>
                             <tbody id="tableBody"></tbody>
                         </table>
@@ -189,11 +179,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             let currentLang = 'ar';
             let processedItems = [];
+            let maxOpsFound = 0;
 
             const dictionary = {
                 en: {
                     title: "Manufacturing File Processor",
-                    subTitle: "Optimized processing with discrete operation columns",
+                    subTitle: "Smart dynamic columns for manufacturing operations",
                     lblPrefix: "Component Prefix",
                     lblFile: "Excel File",
                     btnProcess: "Process Data",
@@ -206,7 +197,7 @@
                 },
                 ar: {
                     title: "نظام معالجة ملفات التصنيع المطور",
-                    subTitle: "معالجة محسنة مع توزيع العمليات على أعمدة منفصلة",
+                    subTitle: "أعمدة ديناميكية ذكية لعمليات التصنيع",
                     lblPrefix: "بادئة المكون (Prefix)",
                     lblFile: "ملف الإكسل",
                     btnProcess: "بدء المعالجة",
@@ -222,6 +213,7 @@
             const fileInput = document.getElementById('excelFile');
             const prefixInput = document.getElementById('prefixInput');
             const processBtn = document.getElementById('processBtn');
+            const tableHead = document.getElementById('tableHead');
             const tableBody = document.getElementById('tableBody');
             const resultsWrapper = document.getElementById('resultsWrapper');
             const statusArea = document.getElementById('statusArea');
@@ -239,6 +231,7 @@
                 document.getElementById('txtResults').textContent = d.results;
                 document.getElementById('langLabel').textContent = d.lang;
                 document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+                if (processedItems.length > 0) renderTable();
             }
 
             document.getElementById('langSwitch').addEventListener('click', toggleLang);
@@ -254,8 +247,8 @@
                 
                 statusArea.style.display = 'block';
                 resultsWrapper.style.display = 'none';
-                tableBody.innerHTML = '';
                 processedItems = [];
+                maxOpsFound = 0;
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -284,20 +277,14 @@
                             }
 
                             const ops = determineOperations(profile, toolingsRaw);
+                            if (ops.length > maxOpsFound) maxOpsFound = ops.length;
 
-                            // Build object with separate ops for easy export
-                            let item = {
+                            processedItems.push({
                                 component: fullCompName,
                                 profile: profile,
-                                grade: grade
-                            };
-                            
-                            // Fill Ops
-                            for(let k = 0; k < 6; k++) {
-                                item[`op${k+1}`] = ops[k] || "";
-                            }
-
-                            processedItems.push(item);
+                                grade: grade,
+                                ops: ops
+                            });
                         }
                     }
 
@@ -348,42 +335,51 @@
             }
 
             function renderTable() {
+                // Render Headers
+                let headerHtml = `<tr>
+                    <th>Component</th>
+                    <th>Profile</th>
+                    <th>Grade</th>`;
+                for (let k = 1; k <= maxOpsFound; k++) {
+                    headerHtml += `<th>Op ${k}</th>`;
+                }
+                headerHtml += `</tr>`;
+                tableHead.innerHTML = headerHtml;
+
+                // Render Body
                 tableBody.innerHTML = '';
                 processedItems.forEach(item => {
                     const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                    let rowHtml = `
                         <td class="fw-bold text-primary">${item.component}</td>
                         <td class="text-center">${item.profile}</td>
-                        <td class="text-center">${item.grade}</td>
-                        <td class="op-cell">${item.op1}</td>
-                        <td class="op-cell">${item.op2}</td>
-                        <td class="op-cell">${item.op3}</td>
-                        <td class="op-cell">${item.op4}</td>
-                        <td class="op-cell">${item.op5}</td>
-                        <td class="op-cell">${item.op6}</td>
-                    `;
+                        <td class="text-center">${item.grade}</td>`;
+                    
+                    for (let k = 0; k < maxOpsFound; k++) {
+                        rowHtml += `<td class="op-cell">${item.ops[k] || ""}</td>`;
+                    }
+                    tr.innerHTML = rowHtml;
                     tableBody.appendChild(tr);
                 });
             }
 
             document.getElementById('exportBtn').addEventListener('click', () => {
-                // Formatting for Excel Export
-                const exportData = processedItems.map(item => ({
-                    "Component": item.component,
-                    "Profile": item.profile,
-                    "Grade": item.grade,
-                    "Operation 1": item.op1,
-                    "Operation 2": item.op2,
-                    "Operation 3": item.op3,
-                    "Operation 4": item.op4,
-                    "Operation 5": item.op5,
-                    "Operation 6": item.op6
-                }));
+                const exportData = processedItems.map(item => {
+                    let exportObj = {
+                        "Component": item.component,
+                        "Profile": item.profile,
+                        "Grade": item.grade
+                    };
+                    for (let k = 0; k < maxOpsFound; k++) {
+                        exportObj[`Operation ${k+1}`] = item.ops[k] || "";
+                    }
+                    return exportObj;
+                });
 
                 const ws = XLSX.utils.json_to_sheet(exportData);
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "ManufacturingData");
-                XLSX.writeFile(wb, "Manufacturing_Operations_Report.xlsx");
+                XLSX.writeFile(wb, "Manufacturing_Operations_Clean.xlsx");
                 showNotify(dictionary[currentLang].exportSuccess);
             });
 
