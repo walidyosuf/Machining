@@ -3,26 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturing File Processor - Excel Processing Application</title>
+    <title>Manufacturing File Processor - Updated Columns</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
         :root {
             --primary: #4361ee;
             --secondary: #3f37c9;
-            --accent: #3f37c9;
             --light: #f8f9fa;
             --dark: #212529;
             --card-bg: #ffffff;
             --text-color: #212529;
-            --table-header-bg: #f8f9fa;
-            --gradient-start: #4cc950;
-            --gradient-end: #1a2a6c;
             --border-color: #dee2e6;
-            --status-bg: #e3f2fd;
-            --status-border: #bbdefb;
-            --success: #28a745;
-            --danger: #dc3545;
         }
 
         [data-theme="dark"] {
@@ -32,12 +24,7 @@
             --dark: #f8f9fa;
             --card-bg: #252a34;
             --text-color: #f8f9fa;
-            --table-header-bg: #343a40;
             --border-color: #495057;
-            --status-bg: #1a253a;
-            --status-border: #2a354b;
-            --success: #34ce57;
-            --danger: #e4606d;
         }
         
         body {
@@ -45,418 +32,152 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             color: var(--text-color);
-            padding-bottom: 20px;
-            transition: background 0.3s, color 0.3s;
+            padding-bottom: 40px;
+            transition: all 0.3s;
         }
         
         .header {
-            background: linear-gradient(120deg, var(--primary), var(--secondary), var(--accent));
+            background: linear-gradient(120deg, var(--primary), var(--secondary));
             color: white;
             border-radius: 25px;
-            padding: 35px;
-            margin-bottom: 35px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-        
-        .header::before {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
-            transform: rotate(30deg);
-        }
-        
-        .header:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
         
         .card {
-            border-radius: 25px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            transition: all 0.35s ease;
-            border: none;
-            margin-bottom: 35px;
-            background: var(--card-bg);
-            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            margin-bottom: 30px;
         }
-        
-        .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-        }
-        
+
         .btn-primary {
             background: linear-gradient(120deg, var(--primary), var(--secondary));
             border: none;
-            padding: 14px 30px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            border-radius: 55px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(120deg, var(--secondary), var(--primary));
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
-        }
-        
-        .btn-success {
-            background: linear-gradient(120deg, #4caf50, #2e7d32);
-            border: none;
-            padding: 14px 30px;
-            font-weight: bold;
-            border-radius: 55px;
-            box-shadow: 0 5px 15px rgba(76, 171, 80, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .btn-success:hover {
-            background: linear-gradient(120deg, #2e7d32, #4caf50);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(76, 171, 80, 0.4);
-        }
-        
-        .btn-export {
-            background: linear-gradient(120deg, #2196f3, #0d47a1);
-            border: none;
-            padding: 14px 30px;
-            font-weight: bold;
-            border-radius: 55px;
-            color: white;
-            box-shadow: 0 5px 15px rgba(33, 150, 243, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .btn-export:hover {
-            background: linear-gradient(120deg, #0d47a1, #2196f3);
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(33, 150, 243, 0.4);
-        }
-        
-        .icon-circle {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 28px;
-            margin: 0 auto 25px;
-            box-shadow: 0 10px 20px rgba(67, 97, 238, 0.3);
-        }
-        
-        .status-box {
-            padding: 25px;
-            border-radius: 20px;
-            background: var(--status-bg);
-            border: 2px solid var(--status-border);
-            margin-top: 25px;
-            display: none;
-        }
-        
-        .results-table {
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            background: var(--card-bg);
-            margin-top: 30px;
-            display: none;
-            border: 1px solid var(--border-color);
-        }
-        
-        .table-header {
-            background: linear-gradient(120deg, var(--primary), var(--secondary));
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        
-        .table-header h4 {
-            margin-bottom: 0;
-            font-weight: 700;
-        }
-        
-        .table th {
-            font-weight: 600;
-            background-color: var(--table-header-bg);
-            border-bottom: 2px solid var(--primary);
-        }
-        
-        .table tbody tr:hover {
-            background-color: rgba(0, 0, 0, 0.03);
-        }
-        
-        .no-results {
-            padding: 40px;
-            text-align: center;
-            color: #6c757d;
-            font-style: italic;
-            border-radius: 20px;
-            background: var(--card-bg);
-        }
-        
-        .table-responsive {
-            max-height: 550px;
-            overflow-y: auto;
-            border-radius: 20px;
-        }
-        
-        .operation-badge {
-            display: inline-block;
-            padding: 8px 18px;
             border-radius: 12px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-            color: #0d47a1;
-            border: 1px solid #90caf9;
+            padding: 12px 25px;
+            font-weight: 600;
         }
-        
-        .operation-badge.m {
-            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #1b5e20;
-            border-color: #a5d6a7;
+
+        .op-cell {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+            text-align: center;
+            border-left: 1px solid var(--border-color);
         }
-        
-        .operation-badge.mc {
-            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
-            color: #4527a0;
-            border-color: #ce93d8;
-        }
-        
-        .operation-badge.mb {
-            background: linear-gradient(135deg, #e0f7fa 0%, #b3e5fc 100%);
-            color: #006064;
-            border-color: #80deea;
-        }
-        
-        .operation-badge.mcb {
-            background: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
-            color: #5d4037;
-            border-color: #fff176;
-        }
-        
-        .lang-switch {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .lang-switch:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .theme-switch {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .theme-switch:hover {
-            background: rgba(255, 255, 255, 0.2);
-        }
-        
-        .theme-icon {
-            margin: 0 5px;
-        }
-        
-        .top-bar {
-            display: flex;
-            justify-content: flex-end;
-            padding: 10px 20px;
-            margin-bottom: 20px;
-        }
-        
-        .export-options {
-            display: flex;
-            gap: 15px;
+
+        .results-table {
+            display: none;
             margin-top: 20px;
         }
-        
+
         .alert-message {
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1050;
-            min-width: 300px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             display: none;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        
-        @media (max-width: 768px) {
-            .header {
-                padding: 25px 20px;
-            }
-            
-            .header h1 {
-                font-size: 26px;
-            }
-            
-            .card {
-                border-radius: 20px;
-            }
-            
-            .table th, .table td {
-                font-size: 0.85rem;
-                padding: 10px 5px;
-            }
-            
-            .table-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .table-header .btn {
-                margin-top: 15px;
-                width: 100%;
-            }
-            
-            .export-options {
-                flex-direction: column;
-            }
-            
-            .export-options .btn {
-                width: 100%;
-            }
-            
-            .operation-badge {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            
-            .alert-message {
-                left: 20px;
-                right: 20px;
-                min-width: auto;
-            }
+
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            padding: 15px;
+            gap: 15px;
+        }
+
+        .lang-switch, .theme-switch {
+            cursor: pointer;
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .table thead th {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- رسالة التنبيه -->
-        <div class="alert-message alert alert-success" role="alert" id="alertMessage">
-            <div class="d-flex align-items-center">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <span id="alertText">تم التصدير بنجاح</span>
-            </div>
+    <div class="container-fluid px-4">
+        <div class="alert-message alert alert-success" id="alertBox">
+            <span id="alertContent"></span>
         </div>
-        
+
         <div class="top-bar">
             <div class="lang-switch" id="langSwitch">
-                <i class="bi bi-globe-americas"></i>
-                <span id="langText">EN</span>
+                <i class="bi bi-globe"></i> <span id="langLabel">EN</span>
             </div>
             <div class="theme-switch" id="themeSwitch">
-                <i class="bi bi-sun theme-icon"></i>
-                <i class="bi bi-moon theme-icon" style="display: none;"></i>
+                <i class="bi bi-moon"></i>
             </div>
         </div>
-        
+
         <div class="header text-center">
-            <h1 class="display-3 fw-bold" id="mainTitle">Manufacturing File Processor</h1>
-            <p class="lead fs-4" id="subTitle">Advanced Excel Processing Application for Manufacturing Data</p>
+            <h1 id="txtTitle">Manufacturing File Processor</h1>
+            <p id="txtSubTitle">Optimized processing with discrete operation columns</p>
         </div>
 
         <div class="row">
-            <div class="col-lg-8 mx-auto">
-                <div class="card">
-                    <div class="card-body p-4">
-                        <div class="text-center mb-4">
-                            <div class="icon-circle">
-                                <i class="bi bi-file-earmark-excel"></i>
-                            </div>
-                            <h3 class="fw-bold" id="importTitle">Import Excel File</h3>
+            <div class="col-lg-12">
+                <div class="card p-4">
+                    <div class="row g-3">
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold" id="lblPrefix">Component Prefix</label>
+                            <input type="text" id="prefixInput" class="form-control" placeholder="Ex: JOB-101">
                         </div>
-                        
-                        <div class="mb-3">
-                            <label for="excelFile" class="form-label" id="fileLabel">Select Excel file to process</label>
-                            <input type="file" class="form-control" id="excelFile" accept=".xlsx, .xls" 
-                                   style="border-radius: 15px; padding: 12px;">
-                            <small class="text-muted d-block mt-2" id="fileHelp">
-                                Please upload an Excel file containing manufacturing data for steel and sheet metal
-                            </small>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold" id="lblFile">Excel File</label>
+                            <input type="file" id="excelFile" class="form-control" accept=".xlsx, .xls">
                         </div>
-                        
-                        <button id="processBtn" class="btn btn-primary btn-lg w-100" disabled>
-                            <i class="bi bi-play-circle me-2"></i><span id="processBtnText">Process File</span>
-                        </button>
-                        
-                        <div class="export-options">
-                            <a id="downloadLink" class="btn btn-success btn-lg d-none" 
-                               download="processed_data.xlsx">
-                                <i class="bi bi-download me-2"></i><span id="downloadLinkText">Download Processed File</span>
-                            </a>
-                            
-                            <button id="exportTableBtn" class="btn btn-export btn-lg d-none">
-                                <i class="bi bi-table me-2"></i><span id="exportTableBtnText">Export Table to Excel</span>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button id="processBtn" class="btn btn-primary w-100" disabled style="height: 48px;">
+                                <i class="bi bi-gear-fill me-2"></i> <span id="btnProcess">Process</span>
                             </button>
                         </div>
-                        
-                        <div id="status" class="status-box">
-                            <div class="d-flex align-items-center">
-                                <div class="spinner-border text-primary me-2" role="status" style="display: none;">
-                                    <span class="visually-hidden" id="processingStatus">Processing...</span>
-                                </div>
-                                <div id="statusText"></div>
-                            </div>
+                    </div>
+
+                    <div id="statusArea" class="mt-4" style="display:none;">
+                        <div class="alert alert-info d-flex align-items-center">
+                            <div class="spinner-border spinner-border-sm me-3"></div>
+                            <span id="txtStatus">Processing...</span>
                         </div>
-                        
-                        <!-- جدول النتائج -->
-                        <div id="resultsContainer" class="results-table">
-                            <div class="table-header p-3">
-                                <div>
-                                    <h4 class="mb-0 text-white" id="resultsHeader">Processed Results</h4>
-                                    <p class="mb-0 text-white-50" id="resultsSubHeader">Data processed according to required specifications</p>
-                                </div>
-                                <button id="exportTableHeaderBtn" class="btn btn-light btn-sm">
-                                    <i class="bi bi-download me-1"></i><span id="exportTableHeaderText">Export Table</span>
-                                </button>
-                            </div>
-                            <div class="table-responsive">
-                                <table class="table table-striped mb-0" id="resultsTable">
-                                    <thead class="bg-light">
-                                        <tr>
-                                            <th scope="col" style="width: 12%;" id="componentHeader">component</th>
-                                            <th scope="col" style="width: 12%;" id="profileHeader">profile</th>
-                                            <th scope="col" style="width: 12%;" id="gradeHeader">Grade</th>
-                                            <th scope="col" style="width: 12%;" id="qtyHeader">qty</th>
-                                            <th scope="col" style="width: 12%;" id="lengthHeader">Length</th>
-                                            <th scope="col" style="width: 12%;" id="weightHeader">weight</th>
-                                            <th scope="col" style="width: 15%;" id="operationHeader">Operation</th>
-                                            <th scope="col" style="width: 12%;" id="diameterHeader">diameter</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="resultsTableBody">
-                                        <!-- سيتم ملء البيانات هنا -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+
+                <div id="resultsWrapper" class="results-table">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 id="txtResults">Extracted Data</h4>
+                        <button id="exportBtn" class="btn btn-success">
+                            <i class="bi bi-file-earmark-excel"></i> <span id="btnExport">Export to Excel</span>
+                        </button>
+                    </div>
+                    <div class="table-responsive bg-white rounded-3 shadow-sm">
+                        <table class="table table-bordered align-middle mb-0" id="mainTable">
+                            <thead>
+                                <tr>
+                                    <th>Component</th>
+                                    <th>Profile</th>
+                                    <th>Grade</th>
+                                    <th>Op 1</th>
+                                    <th>Op 2</th>
+                                    <th>Op 3</th>
+                                    <th>Op 4</th>
+                                    <th>Op 5</th>
+                                    <th>Op 6</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -466,377 +187,222 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // تعيين اللغة الافتراضية إلى الإنجليزية
-            let currentLang = 'en';
-            let currentTheme = 'light';
-            
-            // تحميل التفضيلات من localStorage
-            if (localStorage.getItem('appLang')) {
-                currentLang = localStorage.getItem('appLang');
-            }
-            if (localStorage.getItem('appTheme')) {
-                currentTheme = localStorage.getItem('appTheme');
-            }
-            
-            // تطبيق التفضيلات
-            applyLanguage(currentLang);
-            applyTheme(currentTheme);
-            
-            // إعداد أزرار التبديل
-            document.getElementById('langSwitch').addEventListener('click', function() {
-                currentLang = currentLang === 'en' ? 'ar' : 'en';
-                localStorage.setItem('appLang', currentLang);
-                applyLanguage(currentLang);
-                document.documentElement.setAttribute('dir', currentLang === 'ar' ? 'rtl' : 'ltr');
-                document.documentElement.setAttribute('lang', currentLang);
-            });
-            
-            document.getElementById('themeSwitch').addEventListener('click', function() {
-                currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-                localStorage.setItem('appTheme', currentTheme);
-                applyTheme(currentTheme);
-            });
-            
-            // دوال لتطبيق اللغة والسمة
-            function applyLanguage(lang) {
-                if (lang === 'en') {
-                    document.getElementById('mainTitle').textContent = 'Manufacturing File Processor';
-                    document.getElementById('subTitle').textContent = 'Advanced Excel Processing Application for Manufacturing Data';
-                    document.getElementById('importTitle').textContent = 'Import Excel File';
-                    document.getElementById('fileLabel').textContent = 'Select Excel file to process';
-                    document.getElementById('fileHelp').textContent = 'Please upload an Excel file containing manufacturing data for steel and sheet metal';
-                    document.getElementById('processBtnText').textContent = 'Process File';
-                    document.getElementById('downloadLinkText').textContent = 'Download Processed File';
-                    document.getElementById('exportTableBtnText').textContent = 'Export Table to Excel';
-                    document.getElementById('processingStatus').textContent = 'Processing...';
-                    document.getElementById('resultsHeader').textContent = 'Processed Results';
-                    document.getElementById('resultsSubHeader').textContent = 'Data processed according to required specifications';
-                    document.getElementById('exportTableHeaderText').textContent = 'Export Table';
-                    document.getElementById('componentHeader').textContent = 'component';
-                    document.getElementById('profileHeader').textContent = 'profile';
-                    document.getElementById('gradeHeader').textContent = 'Grade';
-                    document.getElementById('qtyHeader').textContent = 'qty';
-                    document.getElementById('lengthHeader').textContent = 'Length';
-                    document.getElementById('weightHeader').textContent = 'weight';
-                    document.getElementById('operationHeader').textContent = 'Operation';
-                    document.getElementById('diameterHeader').textContent = 'diameter';
-                    document.getElementById('langText').textContent = 'EN';
-                    
-                    // تحديث اتجاه النص
-                    document.documentElement.setAttribute('dir', 'ltr');
-                } else {
-                    document.getElementById('mainTitle').textContent = 'نظام معالجة ملفات التصنيع';
-                    document.getElementById('subTitle').textContent = 'تطبيق متقدم لمعالجة بيانات التصنيع من ملفات إكسل';
-                    document.getElementById('importTitle').textContent = 'استيراد ملف إكسل';
-                    document.getElementById('fileLabel').textContent = 'اختر ملف إكسل لمعالجة البيانات';
-                    document.getElementById('fileHelp').textContent = 'يرجى تحميل ملف إكسل يحتوي على بيانات تصنيع قطاعات الحديد والصاج';
-                    document.getElementById('processBtnText').textContent = 'بدء معالجة الملف';
-                    document.getElementById('downloadLinkText').textContent = 'تنزيل الملف المعالج';
-                    document.getElementById('exportTableBtnText').textContent = 'تصدير الجدول إلى Excel';
-                    document.getElementById('processingStatus').textContent = 'جاري المعالجة...';
-                    document.getElementById('resultsHeader').textContent = 'النتائج المعالجة';
-                    document.getElementById('resultsSubHeader').textContent = 'تمت معالجة البيانات وفق المعايير المطلوبة';
-                    document.getElementById('exportTableHeaderText').textContent = 'تصدير الجدول';
-                    document.getElementById('componentHeader').textContent = 'component';
-                    document.getElementById('profileHeader').textContent = 'profile';
-                    document.getElementById('gradeHeader').textContent = 'Grade';
-                    document.getElementById('qtyHeader').textContent = 'qty';
-                    document.getElementById('lengthHeader').textContent = 'Length';
-                    document.getElementById('weightHeader').textContent = 'weight';
-                    document.getElementById('operationHeader').textContent = 'Operation';
-                    document.getElementById('diameterHeader').textContent = 'diameter';
-                    document.getElementById('langText').textContent = 'AR';
-                    
-                    // تحديث اتجاه النص
-                    document.documentElement.setAttribute('dir', 'rtl');
+            let currentLang = 'ar';
+            let processedItems = [];
+
+            const dictionary = {
+                en: {
+                    title: "Manufacturing File Processor",
+                    subTitle: "Optimized processing with discrete operation columns",
+                    lblPrefix: "Component Prefix",
+                    lblFile: "Excel File",
+                    btnProcess: "Process Data",
+                    btnExport: "Export to Excel",
+                    results: "Extracted Data",
+                    status: "Processing...",
+                    success: "Processed successfully!",
+                    exportSuccess: "File exported!",
+                    lang: "AR"
+                },
+                ar: {
+                    title: "نظام معالجة ملفات التصنيع المطور",
+                    subTitle: "معالجة محسنة مع توزيع العمليات على أعمدة منفصلة",
+                    lblPrefix: "بادئة المكون (Prefix)",
+                    lblFile: "ملف الإكسل",
+                    btnProcess: "بدء المعالجة",
+                    btnExport: "تصدير النتائج",
+                    results: "البيانات المستخرجة",
+                    status: "جاري المعالجة...",
+                    success: "تمت المعالجة بنجاح!",
+                    exportSuccess: "تم تصدير الملف!",
+                    lang: "EN"
                 }
-            }
-            
-            function applyTheme(theme) {
-                if (theme === 'dark') {
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                    document.querySelector('.theme-switch .bi-sun').style.display = 'none';
-                    document.querySelector('.theme-switch .bi-moon').style.display = 'inline';
-                } else {
-                    document.documentElement.removeAttribute('data-theme');
-                    document.querySelector('.theme-switch .bi-sun').style.display = 'inline';
-                    document.querySelector('.theme-switch .bi-moon').style.display = 'none';
-                }
-            }
-            
-            // المتغيرات الأساسية
+            };
+
             const fileInput = document.getElementById('excelFile');
+            const prefixInput = document.getElementById('prefixInput');
             const processBtn = document.getElementById('processBtn');
-            const downloadLink = document.getElementById('downloadLink');
-            const exportTableBtn = document.getElementById('exportTableBtn');
-            const exportTableHeaderBtn = document.getElementById('exportTableHeaderBtn');
-            const statusBox = document.getElementById('status');
-            const statusText = document.getElementById('statusText');
-            const spinner = statusBox.querySelector('.spinner-border');
-            const resultsContainer = document.getElementById('resultsContainer');
-            const resultsTableBody = document.getElementById('resultsTableBody');
-            const alertMessage = document.getElementById('alertMessage');
-            const alertText = document.getElementById('alertText');
-            
-            // متغير لتخزين البيانات المعالجة
-            let processedData = [];
+            const tableBody = document.getElementById('tableBody');
+            const resultsWrapper = document.getElementById('resultsWrapper');
+            const statusArea = document.getElementById('statusArea');
+            const alertBox = document.getElementById('alertBox');
 
-            // دالة لعرض رسالة تنبيه
-            function showAlert(message, type = 'success') {
-                alertMessage.className = `alert-message alert alert-${type}`;
-                alertText.textContent = message;
-                alertMessage.style.display = 'block';
-                
-                setTimeout(() => {
-                    alertMessage.style.display = 'none';
-                }, 4000);
+            function toggleLang() {
+                currentLang = currentLang === 'en' ? 'ar' : 'en';
+                const d = dictionary[currentLang];
+                document.getElementById('txtTitle').textContent = d.title;
+                document.getElementById('txtSubTitle').textContent = d.subTitle;
+                document.getElementById('lblPrefix').textContent = d.lblPrefix;
+                document.getElementById('lblFile').textContent = d.lblFile;
+                document.getElementById('btnProcess').textContent = d.btnProcess;
+                document.getElementById('btnExport').textContent = d.btnExport;
+                document.getElementById('txtResults').textContent = d.results;
+                document.getElementById('langLabel').textContent = d.lang;
+                document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
             }
 
-            // دالة لمعالجة عمود Operation حسب القواعد الجديدة
-            function processOperation(tooling) {
-                if (!tooling || typeof tooling !== 'string') {
-                    return tooling;
-                }
-                
-                // تنظيف النص من الأحرف غير الهامة وتحويله إلى حروف كبيرة
-                const cleanText = tooling.toUpperCase().replace(/[^A-Z]/g, '');
-                
-                const hasM = /CUTTING|DRILLING|MARKING/.test(cleanText);
-                const hasC = /COPING/.test(cleanText);
-                const hasB = /BENDING/.test(cleanText);
-                
-                // إنشاء النتيجة حسب الشروط
-                if (hasM) {
-                    let result = 'M';
-                    if (hasC) result += ', C';
-                    if (hasB) result += ', B';
-                    return result;
-                }
-                
-                // إذا لم توجد أي من الشروط الرئيسية، نعيد القيمة الأصلية
-                return tooling;
-            }
+            document.getElementById('langSwitch').addEventListener('click', toggleLang);
+            toggleLang();
 
-            // تفعيل زر المعالجة عند اختيار ملف
-            fileInput.addEventListener('change', function() {
-                processBtn.disabled = !this.files.length;
-                downloadLink.classList.add('d-none');
-                exportTableBtn.classList.add('d-none');
-                statusBox.style.display = 'none';
-                resultsContainer.style.display = 'none';
-                resultsTableBody.innerHTML = '';
+            fileInput.addEventListener('change', () => {
+                processBtn.disabled = !fileInput.files.length;
             });
 
-            // معالجة الملف
-            processBtn.addEventListener('click', function() {
-                if (!fileInput.files.length) return;
-                
-                // عرض حالة المعالجة
-                statusBox.style.display = 'block';
-                spinner.style.display = 'inline-block';
-                statusText.textContent = currentLang === 'en' ? 'Processing file...' : 'جاري معالجة الملف...';
-                resultsContainer.style.display = 'none';
-                resultsTableBody.innerHTML = '';
-                
+            processBtn.addEventListener('click', async () => {
                 const file = fileInput.files[0];
+                const prefix = prefixInput.value.trim();
+                
+                statusArea.style.display = 'block';
+                resultsWrapper.style.display = 'none';
+                tableBody.innerHTML = '';
+                processedItems = [];
+
                 const reader = new FileReader();
-                
                 reader.onload = function(e) {
-                    try {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const firstSheetName = workbook.SheetNames[0];
-                        const worksheet = workbook.Sheets[firstSheetName];
-                        
-                        // تحويل البيانات إلى كائن
-                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-                        
-                        // معالجة البيانات حسب المطلوب
-                        processedData = [];
-                        let processedCount = 0;
-                        
-                        // البدء من الصف 11 (فهرس 10 في المصفوفة) وزيادة كل 10
-                        for (let i = 10; i < jsonData.length; i += 10) {
-                            const mainRow = jsonData[i] || [];
-                            const toolingRow = (i + 2 < jsonData.length) ? jsonData[i + 2] : [];
-                            const diameterRow = (i + 6 < jsonData.length) ? jsonData[i + 6] : [];
-                            
-                            // تحقق مما إذا كانت الصفوف موجودة
-                            if (mainRow.length > 0 || toolingRow.length > 0 || diameterRow.length > 0) {
-                                // معالجة Length (إزالة mm)
-                                let lengthVal = mainRow[4] || '';
-                                if (typeof lengthVal === 'string') {
-                                    lengthVal = lengthVal.replace(/mm/gi, '').trim();
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                    for (let i = 0; i < rows.length; i++) {
+                        const cellValue = String(rows[i][0] || "").trim();
+
+                        if (cellValue.toLowerCase() === "component") {
+                            const nextRow = rows[i+1] || [];
+                            const rawCompName = String(nextRow[0] || "").trim();
+                            const fullCompName = prefix ? `${prefix} ${rawCompName}` : rawCompName;
+                            const profile = String(nextRow[1] || "").trim();
+                            const grade = String(nextRow[2] || "").trim();
+
+                            let toolingsRaw = "";
+                            for (let j = i + 1; j < Math.min(i + 20, rows.length); j++) {
+                                let checkCell = String(rows[j][0] || "").trim().toLowerCase();
+                                if (checkCell === "toolings") {
+                                    toolingsRaw = String(rows[j][1] || "").toUpperCase();
+                                    break;
                                 }
-                                
-                                // معالجة weight (إزالة kg)
-                                let weightVal = mainRow[6] || '';
-                                if (typeof weightVal === 'string') {
-                                    weightVal = weightVal.replace(/kg/gi, '').trim();
-                                }
-                                
-                                // معالجة tooling حسب القواعد المطلوبة
-                                const rawTooling = toolingRow[1] || '';
-                                const processedOperation = processOperation(rawTooling);
-                                
-                                // إضافة البيانات إلى النتائج
-                                processedData.push({
-                                    component: mainRow[0] || '',
-                                    profile: mainRow[1] || '',
-                                    Grade: mainRow[2] || '',
-                                    qty: mainRow[3] || '',
-                                    Length: lengthVal,
-                                    weight: weightVal,
-                                    Operation: processedOperation,
-                                    diameter: diameterRow[1] || ''
-                                });
-                                processedCount++;
                             }
+
+                            const ops = determineOperations(profile, toolingsRaw);
+
+                            // Build object with separate ops for easy export
+                            let item = {
+                                component: fullCompName,
+                                profile: profile,
+                                grade: grade
+                            };
+                            
+                            // Fill Ops
+                            for(let k = 0; k < 6; k++) {
+                                item[`op${k+1}`] = ops[k] || "";
+                            }
+
+                            processedItems.push(item);
                         }
-                        
-                        // إنشاء الملف الجديد
-                        const newWorksheet = XLSX.utils.json_to_sheet(processedData, {
-                            header: ['component', 'profile', 'Grade', 'qty', 'Length', 'weight', 'Operation', 'diameter'],
-                            skipHeader: false
-                        });
-                        
-                        const newWorkbook = XLSX.utils.book_new();
-                        XLSX.utils.book_append_sheet(newWorkbook, newWorksheet, 'Processed_Data');
-                        
-                        // إنشاء ملف إكسل
-                        const excelBuffer = XLSX.write(newWorkbook, { bookType: 'xlsx', type: 'array' });
-                        const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-                        
-                        // إعداد رابط التنزيل
-                        downloadLink.href = URL.createObjectURL(blob);
-                        downloadLink.classList.remove('d-none');
-                        
-                        // عرض النتائج في الجدول
-                        if (processedData.length > 0) {
-                            resultsTableBody.innerHTML = '';
-                            processedData.forEach(item => {
-                                const row = document.createElement('tr');
-                                
-                                // تحديد لون العلامة بناءً على قيمة Operation
-                                let operationBadgeClass = 'operation-badge';
-                                if (item.Operation === 'M') {
-                                    operationBadgeClass += ' m';
-                                } else if (item.Operation === 'M, C') {
-                                    operationBadgeClass += ' mc';
-                                } else if (item.Operation === 'M, B') {
-                                    operationBadgeClass += ' mb';
-                                } else if (item.Operation === 'M, C, B') {
-                                    operationBadgeClass += ' mcb';
-                                }
-                                
-                                row.innerHTML = `
-                                    <td>${item.component || '<span class="text-muted">-</span>'}</td>
-                                    <td>${item.profile || '<span class="text-muted">-</span>'}</td>
-                                    <td>${item.Grade || '<span class="text-muted">-</span>'}</td>
-                                    <td>${item.qty || '<span class="text-muted">-</span>'}</td>
-                                    <td>${item.Length || '<span class="text-muted">-</span>'}</td>
-                                    <td>${item.weight || '<span class="text-muted">-</span>'}</td>
-                                    <td>
-                                        <span class="${operationBadgeClass}">
-                                            ${item.Operation || '-'}
-                                        </span>
-                                    </td>
-                                    <td>${item.diameter || '<span class="text-muted">-</span>'}</td>
-                                `;
-                                resultsTableBody.appendChild(row);
-                            });
-                            resultsContainer.style.display = 'block';
-                            exportTableBtn.classList.remove('d-none');
-                        } else {
-                            resultsTableBody.innerHTML = `
-                                <tr>
-                                    <td colspan="8" class="text-center p-5 text-muted rounded-4">
-                                        <i class="bi bi-exclamation-circle me-2 fs-1"></i>
-                                        <h5 class="mt-2">${currentLang === 'en' ? 'No matching data found in the file' : 'لم يتم العثور على بيانات مطابقة في الملف'}</h5>
-                                        <p class="mt-2">${currentLang === 'en' ? 'Please check file format and data location' : 'يرجى التأكد من تنسيق الملف ووجود البيانات في المواقع الصحيحة'}</p>
-                                    </td>
-                                </tr>
-                            `;
-                            resultsContainer.style.display = 'block';
-                        }
-                        
-                        // تحديث الحالة
-                        spinner.style.display = 'none';
-                        statusText.textContent = currentLang === 'en' ? 
-                            `Processed ${processedCount} records successfully!` : 
-                            `تمت معالجة ${processedCount} سجل بنجاح!`;
-                        
-                    } catch (error) {
-                        console.error('Error processing file:', error);
-                        spinner.style.display = 'none';
-                        statusText.textContent = currentLang === 'en' ? 
-                            `Processing error: ${error.message}` : 
-                            `خطأ في المعالجة: ${error.message}`;
-                        resultsTableBody.innerHTML = `
-                            <tr>
-                                <td colspan="8" class="text-center p-4 text-danger">
-                                    <i class="bi bi-exclamation-triangle me-2 fs-1"></i>
-                                    <h5 class="mt-2">${currentLang === 'en' ? 'Processing Error' : 'حدث خطأ أثناء المعالجة'}</h5>
-                                    <p class="mt-2">${error.message}</p>
-                                </td>
-                            </tr>
-                        `;
-                        resultsContainer.style.display = 'block';
                     }
+
+                    renderTable();
+                    statusArea.style.display = 'none';
+                    resultsWrapper.style.display = 'block';
+                    showNotify(dictionary[currentLang].success);
                 };
-                
                 reader.readAsArrayBuffer(file);
             });
-            
-            // تصدير البيانات من الجدول
-            function exportTableToExcel() {
-                if (processedData.length === 0) {
-                    showAlert(
-                        currentLang === 'en' ? 'No data to export. Please process a file first.' : 'لا توجد بيانات لتصديرها. يرجى معالجة ملف أولاً.',
-                        'danger'
-                    );
-                    return;
-                }
+
+            function determineOperations(profile, toolings) {
+                let sequence = [];
+                const firstChar = profile.charAt(0).toUpperCase();
+                const cleanTool = toolings.replace(/[^A-Z]/g, '');
                 
-                try {
-                    // إنشاء ورقة عمل جديدة من البيانات المعالجة
-                    const worksheet = XLSX.utils.json_to_sheet(processedData, {
-                        header: ['component', 'profile', 'Grade', 'qty', 'Length', 'weight', 'Operation', 'diameter'],
-                        skipHeader: false
-                    });
-                    
-                    // إنشاء مصنف جديد وإضافة الورقة
-                    const workbook = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(workbook, worksheet, 'Processed_Data');
-                    
-                    // إنشاء ملف Excel وتنزيله
-                    const fileName = currentLang === 'en' ? 'processed_data_from_table.xlsx' : 'البيانات_المعالجة_من_الجدول.xlsx';
-                    XLSX.writeFile(workbook, fileName);
-                    
-                    // عرض رسالة نجاح
-                    showAlert(
-                        currentLang === 'en' ? 'Table exported successfully!' : 'تم تصدير الجدول بنجاح!',
-                        'success'
-                    );
-                } catch (error) {
-                    console.error('Error exporting table:', error);
-                    showAlert(
-                        currentLang === 'en' ? 'Export failed. Please try again.' : 'فشل التصدير. يرجى المحاولة مرة أخرى.',
-                        'danger'
-                    );
+                const hasCutting = cleanTool.includes("CUTTING");
+                const hasDrilling = cleanTool.includes("DRILLING");
+                const hasMarking = cleanTool.includes("MARKING");
+                const hasCoping = cleanTool.includes("COPING");
+                const hasBending = cleanTool.includes("BENDING");
+
+                if (firstChar === 'P' || firstChar === 'F') {
+                    sequence.push("Shearing");
+                    sequence.push("Minimum");
+                    if (hasCoping) sequence.push("Cropping");
+                    if (hasBending) {
+                        sequence.push("Bending");
+                        sequence.push("Drilling");
+                    }
+                } 
+                else if (firstChar === 'L') {
+                    if (hasCutting || hasDrilling || hasMarking) sequence.push("Minimum");
+                    if (hasCoping) sequence.push("Cropping");
+                    if (hasBending) {
+                        sequence.push("Bending");
+                        sequence.push("Drilling");
+                    }
                 }
+                else {
+                    if (hasCutting || hasDrilling || hasMarking) sequence.push("Minimum");
+                    if (hasCoping) sequence.push("Cropping");
+                    if (hasBending) sequence.push("Bending");
+                }
+
+                sequence.push("Finishing");
+                return sequence;
             }
-            
-            // إضافة مستمعي الأحداث لأزرار التصدير
-            exportTableBtn.addEventListener('click', exportTableToExcel);
-            exportTableHeaderBtn.addEventListener('click', exportTableToExcel);
-            
-            // إضافة مستمع حدث لرابط التنزيل لإظهار رسالة تأكيد
-            downloadLink.addEventListener('click', function() {
-                showAlert(
-                    currentLang === 'en' ? 'File download started!' : 'بدأ تنزيل الملف!',
-                    'success'
-                );
+
+            function renderTable() {
+                tableBody.innerHTML = '';
+                processedItems.forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="fw-bold text-primary">${item.component}</td>
+                        <td class="text-center">${item.profile}</td>
+                        <td class="text-center">${item.grade}</td>
+                        <td class="op-cell">${item.op1}</td>
+                        <td class="op-cell">${item.op2}</td>
+                        <td class="op-cell">${item.op3}</td>
+                        <td class="op-cell">${item.op4}</td>
+                        <td class="op-cell">${item.op5}</td>
+                        <td class="op-cell">${item.op6}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                // Formatting for Excel Export
+                const exportData = processedItems.map(item => ({
+                    "Component": item.component,
+                    "Profile": item.profile,
+                    "Grade": item.grade,
+                    "Operation 1": item.op1,
+                    "Operation 2": item.op2,
+                    "Operation 3": item.op3,
+                    "Operation 4": item.op4,
+                    "Operation 5": item.op5,
+                    "Operation 6": item.op6
+                }));
+
+                const ws = XLSX.utils.json_to_sheet(exportData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "ManufacturingData");
+                XLSX.writeFile(wb, "Manufacturing_Operations_Report.xlsx");
+                showNotify(dictionary[currentLang].exportSuccess);
+            });
+
+            function showNotify(msg) {
+                alertBox.style.display = 'block';
+                document.getElementById('alertContent').textContent = msg;
+                setTimeout(() => { alertBox.style.display = 'none'; }, 3000);
+            }
+
+            document.getElementById('themeSwitch').addEventListener('click', function() {
+                const body = document.body;
+                const icon = this.querySelector('i');
+                if (body.getAttribute('data-theme') === 'dark') {
+                    body.removeAttribute('data-theme');
+                    icon.className = 'bi bi-moon';
+                } else {
+                    body.setAttribute('data-theme', 'dark');
+                    icon.className = 'bi bi-sun';
+                }
             });
         });
     </script>
