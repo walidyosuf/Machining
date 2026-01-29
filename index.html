@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manufacturing File Processor - Professional Edition</title>
+    <title>Manufacturing File Processor - Pro Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,6 +16,7 @@
             --accent: #3b82f6;
             --accent-hover: #2563eb;
             --success: #10b981;
+            --warning: #f59e0b;
             --bg-light: #f8fafc;
             --card-bg: #ffffff;
             --text-main: #1e293b;
@@ -48,108 +49,67 @@
             background: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
             padding: 1rem 2rem;
-            margin-bottom: 2rem;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .stats-card {
+            border: none;
+            border-left: 4px solid var(--accent);
+            padding: 1.25rem;
+            border-radius: 12px;
+            background: var(--card-bg);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .header-section {
-            padding: 2rem 0;
-            margin-bottom: 2rem;
+            padding: 3rem 0 2rem 0;
             text-align: center;
         }
 
         .header-section h1 {
-            font-weight: 700;
-            letter-spacing: -1px;
-            margin-bottom: 0.5rem;
+            font-weight: 800;
             color: var(--primary);
-        }
-
-        .header-section p {
-            color: var(--text-muted);
-            font-size: 1.1rem;
+            font-size: 2.5rem;
         }
         
         .card {
             border-radius: 16px;
             border: 1px solid var(--border-color);
             background: var(--card-bg);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            transition: transform 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        .form-control, .form-select {
-            border-radius: 10px;
-            padding: 0.75rem 1rem;
-            border: 1px solid var(--border-color);
-            background-color: var(--bg-light);
-            color: var(--text-main);
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            border-color: var(--accent);
-        }
-
-        .btn {
-            border-radius: 10px;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            transition: all 0.2s ease;
-        }
-
-        .btn-primary {
-            background-color: var(--accent);
-            border: none;
-        }
-
-        .btn-primary:hover:not(:disabled) {
-            background-color: var(--accent-hover);
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background-color: var(--success);
-            border: none;
-        }
+        .btn-primary { background-color: var(--accent); border: none; }
+        .btn-primary:hover { background-color: var(--accent-hover); }
 
         .table-container {
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-color);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
-
-        .table {
-            margin-bottom: 0;
-            background: var(--card-bg);
-            color: var(--text-main);
         }
 
         .table thead th {
-            background-color: var(--primary);
-            color: #ffffff;
-            font-weight: 600;
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
             padding: 1rem;
-            border: none;
+            border-bottom: 2px solid var(--border-color);
         }
 
-        .table tbody td {
-            padding: 1rem;
-            border-color: var(--border-color);
-            vertical-align: middle;
+        [data-theme="dark"] .table thead th {
+            background-color: #334155;
         }
 
         .op-badge {
             background-color: rgba(59, 130, 246, 0.1);
             color: var(--accent);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.8rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
             font-weight: 600;
-            display: inline-block;
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .alert-message {
@@ -161,50 +121,38 @@
             border-radius: 12px;
             padding: 1rem 1.5rem;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            animation: slideUp 0.3s ease-out;
+            animation: slideIn 0.3s ease-out;
         }
 
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
 
-        .lang-toggle, .theme-toggle {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 500;
+        .search-box {
+            position: relative;
         }
-
-        .lang-toggle:hover, .theme-toggle:hover {
-            background-color: var(--bg-light);
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
         }
-
-        /* RTL Specifics */
-        [dir="rtl"] .alert-message {
-            right: auto;
-            left: 30px;
-        }
+        [dir="rtl"] .search-box i { left: auto; right: 12px; }
+        .search-box input { padding-left: 40px; }
+        [dir="rtl"] .search-box input { padding-left: 12px; padding-right: 40px; }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+    <nav class="navbar sticky-top">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center gap-2">
-                <i class="bi bi-cpu-fill fs-3 text-primary"></i>
-                <span class="fw-bold fs-5" id="navBrand">ManuProcessor</span>
+                <i class="bi bi-gear-wide-connected fs-3 text-accent"></i>
+                <span class="fw-bold fs-4" id="navBrand">ManuProcessor Pro</span>
             </div>
             <div class="d-flex gap-2">
-                <button class="lang-toggle" id="langSwitch">
+                <button class="lang-toggle btn" id="langSwitch" style="border: 1px solid var(--border-color);">
                     <i class="bi bi-translate"></i> <span id="langLabel">English</span>
                 </button>
-                <button class="theme-toggle" id="themeSwitch">
+                <button class="theme-toggle btn" id="themeSwitch" style="border: 1px solid var(--border-color);">
                     <i class="bi bi-moon-stars"></i>
                 </button>
             </div>
@@ -212,7 +160,8 @@
     </nav>
 
     <div class="container">
-        <div class="alert-message alert alert-success" id="alertBox">
+        <!-- Notification -->
+        <div class="alert-message alert alert-success shadow" id="alertBox">
             <div class="d-flex align-items-center gap-2">
                 <i class="bi bi-check-circle-fill"></i>
                 <span id="alertContent"></span>
@@ -221,55 +170,79 @@
 
         <div class="header-section">
             <h1 id="txtTitle">Manufacturing File Processor</h1>
-            <p id="txtSubTitle">Industrial data extraction & logic engine</p>
+            <p id="txtSubTitle">Professional extraction engine with logic-based sequencing</p>
+        </div>
+
+        <!-- Dashboard Stats -->
+        <div class="row g-4 mb-5" id="statsRow" style="display: none;">
+            <div class="col-md-4">
+                <div class="stats-card">
+                    <small class="text-muted d-block" id="stTotalItems">Total Components</small>
+                    <h3 class="fw-bold mb-0" id="valTotalItems">0</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card" style="border-left-color: var(--success);">
+                    <small class="text-muted d-block" id="stUniqueProfiles">Unique Profiles</small>
+                    <h3 class="fw-bold mb-0" id="valUniqueProfiles">0</h3>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card" style="border-left-color: var(--warning);">
+                    <small class="text-muted d-block" id="stMaxOps">Max Operations</small>
+                    <h3 class="fw-bold mb-0" id="valMaxOps">0</h3>
+                </div>
+            </div>
         </div>
 
         <div class="row mb-5">
-            <div class="col-xl-8 mx-auto">
+            <div class="col-xl-10 mx-auto">
                 <div class="card p-4">
                     <div class="row g-4">
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" id="lblPrefix">Component Prefix</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-tag"></i></span>
-                                <input type="text" id="prefixInput" class="form-control border-start-0" placeholder="e.g. BEAM-2024">
-                            </div>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold small text-uppercase" id="lblPrefix">Prefix Identifier</label>
+                            <input type="text" id="prefixInput" class="form-control" placeholder="e.g. PROJECT-X">
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold" id="lblFile">Source File (.xlsx)</label>
+                        <div class="col-md-5">
+                            <label class="form-label fw-bold small text-uppercase" id="lblFile">Upload Source Excel</label>
                             <input type="file" id="excelFile" class="form-control" accept=".xlsx, .xls">
                         </div>
-                        <div class="col-12 text-center mt-2">
-                            <button id="processBtn" class="btn btn-primary px-5 shadow-sm" disabled>
-                                <i class="bi bi-lightning-charge-fill me-2"></i> <span id="btnProcess">Start Processing</span>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button id="processBtn" class="btn btn-primary w-100 py-2" disabled>
+                                <i class="bi bi-play-fill"></i> <span id="btnProcess">Process</span>
                             </button>
                         </div>
                     </div>
 
                     <div id="statusArea" class="mt-4" style="display:none;">
-                        <div class="d-flex flex-column align-items-center">
-                            <div class="spinner-grow text-primary mb-2" role="status"></div>
-                            <span id="txtStatus" class="fw-medium">Analysing manufacturing rows...</span>
+                        <div class="text-center">
+                            <div class="spinner-border text-accent mb-2" role="status"></div>
+                            <p id="txtStatus" class="small text-muted mb-0">Scanning document structure...</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="resultsWrapper" class="results-table">
+        <div id="resultsWrapper" style="display: none;">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
-                <h3 class="fw-bold mb-0" id="txtResults">Processing Results</h3>
-                <button id="exportBtn" class="btn btn-success shadow-sm">
-                    <i class="bi bi-download me-2"></i> <span id="btnExport">Export Final Excel</span>
-                </button>
+                <h4 class="fw-bold mb-0" id="txtResults">Extracted Data</h4>
+                
+                <div class="d-flex gap-2">
+                    <div class="search-box">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="tableSearch" class="form-control form-control-sm" placeholder="Search components...">
+                    </div>
+                    <button id="exportBtn" class="btn btn-success btn-sm px-3">
+                        <i class="bi bi-file-earmark-excel me-1"></i> <span id="btnExport">Export Excel</span>
+                    </button>
+                </div>
             </div>
             
-            <div class="table-container shadow-sm">
+            <div class="table-container shadow-sm bg-white">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle" id="mainTable">
-                        <thead id="tableHead">
-                            <!-- Dynamic Headers -->
-                        </thead>
+                    <table class="table table-hover align-middle mb-0" id="mainTable">
+                        <thead id="tableHead"></thead>
                         <tbody id="tableBody"></tbody>
                     </table>
                 </div>
@@ -287,28 +260,32 @@
             const dictionary = {
                 en: {
                     title: "Manufacturing File Processor",
-                    subTitle: "Industrial data extraction & logic engine",
-                    lblPrefix: "Component Prefix",
-                    lblFile: "Source File (.xlsx)",
-                    btnProcess: "Start Processing",
-                    btnExport: "Export Final Excel",
-                    results: "Processing Results",
-                    status: "Analyzing data...",
-                    success: "File processed successfully!",
-                    exportSuccess: "Excel file generated!",
+                    subTitle: "Professional extraction engine with logic-based sequencing",
+                    lblPrefix: "Prefix Identifier",
+                    lblFile: "Upload Source Excel",
+                    btnProcess: "Process",
+                    btnExport: "Export Excel",
+                    results: "Extracted Data",
+                    stTotalItems: "Total Components",
+                    stUniqueProfiles: "Unique Profiles",
+                    stMaxOps: "Max Operations",
+                    success: "Processing completed!",
+                    exportSuccess: "File saved!",
                     lang: "العربية"
                 },
                 ar: {
-                    title: "معالج ملفات التصنيع",
-                    subTitle: "محرك استخراج البيانات والمنطق الصناعي",
-                    lblPrefix: "بادئة البند (Prefix)",
-                    lblFile: "ملف المصدر (Excel)",
-                    btnProcess: "بدء المعالجة الذكية",
-                    btnExport: "تصدير الملف النهائي",
-                    results: "نتائج المعالجة",
-                    status: "جاري تحليل الصفوف...",
+                    title: "معالج ملفات التصنيع المطور",
+                    subTitle: "محرك استخراج البيانات المتقدم مع منطق تسلسل العمليات",
+                    lblPrefix: "بادئة التعريف (Prefix)",
+                    lblFile: "رفع ملف الإكسل",
+                    btnProcess: "معالجة",
+                    btnExport: "تصدير النتائج",
+                    results: "البيانات المستخرجة",
+                    stTotalItems: "إجمالي القطع",
+                    stUniqueProfiles: "القطاعات الفريدة",
+                    stMaxOps: "أقصى عمليات",
                     success: "تمت المعالجة بنجاح!",
-                    exportSuccess: "تم إنشاء ملف الإكسل!",
+                    exportSuccess: "تم حفظ الملف!",
                     lang: "English"
                 }
             };
@@ -321,6 +298,7 @@
             const resultsWrapper = document.getElementById('resultsWrapper');
             const statusArea = document.getElementById('statusArea');
             const alertBox = document.getElementById('alertBox');
+            const searchInput = document.getElementById('tableSearch');
 
             function toggleLang() {
                 currentLang = currentLang === 'en' ? 'ar' : 'en';
@@ -332,6 +310,9 @@
                 document.getElementById('btnProcess').textContent = d.btnProcess;
                 document.getElementById('btnExport').textContent = d.btnExport;
                 document.getElementById('txtResults').textContent = d.results;
+                document.getElementById('stTotalItems').textContent = d.stTotalItems;
+                document.getElementById('stUniqueProfiles').textContent = d.stUniqueProfiles;
+                document.getElementById('stMaxOps').textContent = d.stMaxOps;
                 document.getElementById('langLabel').textContent = d.lang;
                 document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
                 if (processedItems.length > 0) renderTable();
@@ -340,16 +321,12 @@
             document.getElementById('langSwitch').addEventListener('click', toggleLang);
             toggleLang();
 
-            fileInput.addEventListener('change', () => {
-                processBtn.disabled = !fileInput.files.length;
-            });
+            fileInput.addEventListener('change', () => processBtn.disabled = !fileInput.files.length);
 
             processBtn.addEventListener('click', async () => {
                 const file = fileInput.files[0];
                 const prefix = prefixInput.value.trim();
-                
                 statusArea.style.display = 'block';
-                resultsWrapper.style.display = 'none';
                 processedItems = [];
                 maxOpsFound = 0;
 
@@ -362,7 +339,6 @@
 
                     for (let i = 0; i < rows.length; i++) {
                         const cellValue = String(rows[i][0] || "").trim();
-
                         if (cellValue.toLowerCase() === "component") {
                             const nextRow = rows[i+1] || [];
                             const rawCompName = String(nextRow[0] || "").trim();
@@ -372,8 +348,7 @@
 
                             let toolingsRaw = "";
                             for (let j = i + 1; j < Math.min(i + 20, rows.length); j++) {
-                                let checkCell = String(rows[j][0] || "").trim().toLowerCase();
-                                if (checkCell === "toolings") {
+                                if (String(rows[j][0] || "").trim().toLowerCase() === "toolings") {
                                     toolingsRaw = String(rows[j][1] || "").toUpperCase();
                                     break;
                                 }
@@ -381,19 +356,15 @@
 
                             const ops = determineOperations(profile, toolingsRaw);
                             if (ops.length > maxOpsFound) maxOpsFound = ops.length;
-
-                            processedItems.push({
-                                component: fullCompName,
-                                profile: profile,
-                                grade: grade,
-                                ops: ops
-                            });
+                            processedItems.push({ component: fullCompName, profile, grade, ops });
                         }
                     }
 
+                    updateStats();
                     renderTable();
                     statusArea.style.display = 'none';
                     resultsWrapper.style.display = 'block';
+                    document.getElementById('statsRow').style.display = 'flex';
                     showNotify(dictionary[currentLang].success);
                 };
                 reader.readAsArrayBuffer(file);
@@ -411,53 +382,49 @@
                 const hasBending = cleanTool.includes("BENDING");
 
                 if (firstChar === 'P' || firstChar === 'F') {
-                    sequence.push("Shearing");
-                    sequence.push("Minimum");
+                    sequence.push("Shearing", "Minimum");
                     if (hasCoping) sequence.push("Cropping");
-                    if (hasBending) {
-                        sequence.push("Bending");
-                        sequence.push("Drilling");
-                    }
+                    if (hasBending) sequence.push("Bending", "Drilling");
                 } 
                 else if (firstChar === 'L') {
                     if (hasCutting || hasDrilling || hasMarking) sequence.push("Minimum");
                     if (hasCoping) sequence.push("Cropping");
-                    if (hasBending) {
-                        sequence.push("Bending");
-                        sequence.push("Drilling");
-                    }
+                    if (hasBending) sequence.push("Bending", "Drilling");
                 }
                 else {
                     if (hasCutting || hasDrilling || hasMarking) sequence.push("Minimum");
                     if (hasCoping) sequence.push("Cropping");
                     if (hasBending) sequence.push("Bending");
                 }
-
                 sequence.push("Finishing");
                 return sequence;
             }
 
-            function renderTable() {
-                const headers = currentLang === 'ar' ? 
-                    ['البند', 'القطاع', 'المعدن'] : 
-                    ['Component', 'Profile', 'Grade'];
+            function updateStats() {
+                document.getElementById('valTotalItems').textContent = processedItems.length;
+                const profiles = new Set(processedItems.map(i => i.profile));
+                document.getElementById('valUniqueProfiles').textContent = profiles.size;
+                document.getElementById('valMaxOps').textContent = maxOpsFound;
+            }
 
-                let headerHtml = `<tr>`;
-                headers.forEach(h => headerHtml += `<th>${h}</th>`);
-                for (let k = 1; k <= maxOpsFound; k++) {
-                    headerHtml += `<th>Op ${k}</th>`;
-                }
-                headerHtml += `</tr>`;
-                tableHead.innerHTML = headerHtml;
+            function renderTable(filter = "") {
+                const headers = currentLang === 'ar' ? ['البند', 'القطاع', 'المعدن'] : ['Component', 'Profile', 'Grade'];
+                let html = `<tr>`;
+                headers.forEach(h => html += `<th>${h}</th>`);
+                for (let k = 1; k <= maxOpsFound; k++) html += `<th>Op ${k}</th>`;
+                html += `</tr>`;
+                tableHead.innerHTML = html;
 
                 tableBody.innerHTML = '';
-                processedItems.forEach(item => {
+                processedItems.filter(item => 
+                    item.component.toLowerCase().includes(filter.toLowerCase()) || 
+                    item.profile.toLowerCase().includes(filter.toLowerCase())
+                ).forEach(item => {
                     const tr = document.createElement('tr');
                     let rowHtml = `
-                        <td class="fw-bold">${item.component}</td>
-                        <td>${item.profile}</td>
-                        <td><span class="text-muted">${item.grade}</span></td>`;
-                    
+                        <td class="fw-bold text-primary small">${item.component}</td>
+                        <td class="small">${item.profile}</td>
+                        <td class="small text-muted">${item.grade}</td>`;
                     for (let k = 0; k < maxOpsFound; k++) {
                         const op = item.ops[k] || "";
                         rowHtml += `<td>${op ? `<span class="op-badge">${op}</span>` : ""}</td>`;
@@ -467,42 +434,32 @@
                 });
             }
 
-            document.getElementById('exportBtn').addEventListener('click', () => {
-                const exportData = processedItems.map(item => {
-                    let exportObj = {
-                        "Component": item.component,
-                        "Profile": item.profile,
-                        "Grade": item.grade
-                    };
-                    for (let k = 0; k < maxOpsFound; k++) {
-                        exportObj[`Operation ${k+1}`] = item.ops[k] || "";
-                    }
-                    return exportObj;
-                });
+            searchInput.addEventListener('input', (e) => renderTable(e.target.value));
 
-                const ws = XLSX.utils.json_to_sheet(exportData);
+            document.getElementById('exportBtn').addEventListener('click', () => {
+                const data = processedItems.map(item => {
+                    let obj = { "Component": item.component, "Profile": item.profile, "Grade": item.grade };
+                    for (let k = 0; k < maxOpsFound; k++) obj[`Op ${k+1}`] = item.ops[k] || "";
+                    return obj;
+                });
+                const ws = XLSX.utils.json_to_sheet(data);
                 const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Data");
-                XLSX.writeFile(wb, "Manufacturing_Report.xlsx");
+                XLSX.utils.book_append_sheet(wb, ws, "Report");
+                XLSX.writeFile(wb, "Manufacturing_Pro_Report.xlsx");
                 showNotify(dictionary[currentLang].exportSuccess);
             });
 
             function showNotify(msg) {
                 alertBox.style.display = 'block';
                 document.getElementById('alertContent').textContent = msg;
-                setTimeout(() => { alertBox.style.display = 'none'; }, 4000);
+                setTimeout(() => alertBox.style.display = 'none', 3000);
             }
 
             document.getElementById('themeSwitch').addEventListener('click', function() {
                 const body = document.body;
-                const icon = this.querySelector('i');
-                if (body.getAttribute('data-theme') === 'dark') {
-                    body.removeAttribute('data-theme');
-                    icon.className = 'bi bi-moon-stars';
-                } else {
-                    body.setAttribute('data-theme', 'dark');
-                    icon.className = 'bi bi-sun';
-                }
+                const isDark = body.getAttribute('data-theme') === 'dark';
+                body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+                this.innerHTML = isDark ? '<i class="bi bi-moon-stars"></i>' : '<i class="bi bi-sun"></i>';
             });
         });
     </script>
